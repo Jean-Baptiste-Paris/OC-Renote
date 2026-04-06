@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Repositories\Interfaces;
+
 use App\Models\Note;
 use Illuminate\Support\Collection;
 

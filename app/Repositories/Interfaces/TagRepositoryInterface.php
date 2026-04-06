@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Repositories\Interfaces;
+
 use App\Models\Tag;
 use Illuminate\Support\Collection;
 
@@ -13,5 +15,5 @@ interface TagRepositoryInterface
 
     public function update(int $id, string $name): Tag;
 
-    public function delete(int $id): bool;
+    public function delete(int $id): void;
 }
