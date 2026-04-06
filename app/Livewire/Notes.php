@@ -2,13 +2,22 @@
 
 namespace App\Livewire;
 
+use App\Services\NoteService;
+use App\Services\TagService;
 use Livewire\Component;
-use App\Models\Note;
-use App\Models\Tag;
 use Illuminate\Support\Facades\Auth;
 
 class Notes extends Component
 {
+    protected NoteService $noteService;
+    protected TagService $tagService;
+
+    public function boot(NoteService $noteService, TagService $tagService): void
+    {
+        $this->noteService = $noteService;
+        $this->tagService = $tagService;
+    }
+
     public $notes;
     public $text = '';
     public $tag_id = '';
@@ -22,29 +31,25 @@ class Notes extends Component
 
     public function mount()
     {
-        $this->tags = Tag::all();
+        $this->tags = $this->tagService->getAllTags();
         $this->loadNotes();
     }
 
     public function loadNotes()
     {
-        $this->notes = Note::with('tag')->where('user_id', Auth::id())->latest()->get();
+        $this->notes = $this->noteService->getNotesForUser(Auth::id());
     }
 
     public function refreshTags()
     {
-        $this->tags = \App\Models\Tag::all();
+        $this->tags = $this->tagService->getAllTags();
     }
 
     public function save()
     {
         $this->validate();
 
-        Note::create([
-            'user_id' => Auth::id(),
-            'tag_id' => $this->tag_id,
-            'text' => $this->text,
-        ]);
+        $this->noteService->createNote(Auth::id(), $this->tag_id, $this->text);
 
         $this->text = '';
         $this->tag_id = '';
@@ -56,7 +61,7 @@ class Notes extends Component
 
     public function delete($noteId)
     {
-        Note::where('id', $noteId)->where('user_id', Auth::id())->delete();
+        $this->noteService->deleteNote($noteId, Auth::id());
         $this->loadNotes();
     }
 

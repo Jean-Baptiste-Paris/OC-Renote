@@ -2,11 +2,18 @@
 
 namespace App\Livewire;
 
+use App\Services\TagService;
 use Livewire\Component;
-use App\Models\Tag;
 
 class TagForm extends Component
 {
+    protected TagService $tagService;
+
+    public function boot(TagService $tagService): void
+    {
+        $this->tagService = $tagService;
+    }
+
     public $name = '';
 
     protected $rules = [
@@ -17,7 +24,7 @@ class TagForm extends Component
     {
         $this->validate();
 
-        Tag::create(['name' => $this->name]);
+        $this->tagService->createTag($this->name);
 
         $this->reset('name');
 
