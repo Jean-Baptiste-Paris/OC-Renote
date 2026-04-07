@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Note;
 use App\Repositories\Interfaces\NoteRepositoryInterface;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
 
 class NoteRepository implements NoteRepositoryInterface
@@ -30,6 +31,9 @@ class NoteRepository implements NoteRepositoryInterface
     public function update(int $id, int $userId, int $tagId, string $text): Note
     {
         $note = $this->findByIdAndUser($id, $userId);
+        if (!$note) {
+            throw new ModelNotFoundException();
+        }
         $note->update([
             'tag_id' => $tagId,
             'text' => $text,

@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Tag;
 use App\Repositories\Interfaces\TagRepositoryInterface;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
 
 class TagRepository implements TagRepositoryInterface
@@ -26,6 +27,9 @@ class TagRepository implements TagRepositoryInterface
     public function update(int $id, string $name): Tag
     {
         $tag = $this->findById($id);
+        if (!$tag) {
+            throw new ModelNotFoundException();
+        }
         $tag->update(['name' => $name]);
         return $tag;
     }
