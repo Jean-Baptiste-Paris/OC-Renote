@@ -13,6 +13,8 @@ class NoteController extends Controller
         private NoteService $noteService
     ) {}
 
+    // TODO: Masquer les champs sensibles (user_id, tag_id) des réponses JSON
+
     public function index(): JsonResponse
     {
         $notes = $this->noteService->getNotesForUser(Auth::id());

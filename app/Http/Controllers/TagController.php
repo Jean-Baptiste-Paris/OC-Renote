@@ -12,6 +12,8 @@ class TagController extends Controller
         private TagService $tagService
     ) {}
 
+    // TODO: Masquer les champs sensibles (user_id, tag_id) des réponses JSON
+
     public function index(): JsonResponse
     {
         $tags = $this->tagService->getAllTags();
