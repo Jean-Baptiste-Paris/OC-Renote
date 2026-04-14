@@ -2,18 +2,34 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterRequest;
+use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    public function login(Request $request): JsonResponse
+    public function __construct(
+        private UserService $userService
+    ) {}
+
+    public function register(RegisterRequest $request): JsonResponse
     {
-        $credentials = $request->validate([
-           'email'      => 'required|email',
-           'password'   => 'required|string'
-        ]);
+        $user = $this->userService->createUser($request->validated());
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        return response()->json([
+            'status'    => 'success',
+            'message'   => 'Registration successful',
+            'data'      => ['token' => $token]
+        ], 201);
+    }
+
+    public function login(LoginRequest $request): JsonResponse
+    {
+        $credentials = $request->validated();
 
         if (!Auth::attempt($credentials)) {
             return response()->json([
