@@ -2,15 +2,21 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\NoteController;
+use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\TagController;
 use Illuminate\Support\Facades\Route;
 
-
+Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+
+Route::post('/forgot-password', [PasswordController::class, 'forgot']);
+Route::post('/reset-password', [PasswordController::class, 'reset']);
 
 Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/logout', [AuthController::class, 'logout']);
+
+    Route::put('/password', [PasswordController::class, 'update']);
 
     Route::get('/notes', [NoteController::class, 'index']);
     Route::get('/notes/{id}', [NoteController::class, 'show']);
