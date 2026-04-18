@@ -6,6 +6,7 @@ vendor
 .DS_Store
 .~lock.*#
 .idea
+CLAUDE.md
 
 back/.phpunit.cache
 back/public/build
