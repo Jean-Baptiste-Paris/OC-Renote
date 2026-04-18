@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../stores/useAuthStore';
+import { Link } from 'react-router-dom';
 
 export function LoginForm() {
     const [email, setEmail] = useState('');
@@ -42,6 +43,7 @@ export function LoginForm() {
             <button type="submit" disabled={loading}>
                 {loading ? 'Loading...' : 'Login'}
             </button>
+            <p>Pas de compte ? <Link to="/register">Register</Link></p>
         </form>
     );
 }
