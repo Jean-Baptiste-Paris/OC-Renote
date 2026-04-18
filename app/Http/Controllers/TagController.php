@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTagRequest;
+use App\Http\Resources\TagResource;
 use App\Services\TagService;
 use Illuminate\Http\JsonResponse;
 
@@ -12,8 +13,6 @@ class TagController extends Controller
         private TagService $tagService
     ) {}
 
-    // TODO: Masquer les champs sensibles (user_id, tag_id) des réponses JSON
-
     public function index(): JsonResponse
     {
         $tags = $this->tagService->getAllTags();
@@ -21,7 +20,7 @@ class TagController extends Controller
         return response()->json([
             'status'    => 'success',
             'message'   => 'Tags retrieved successfully',
-            'data'      => $tags
+            'data'      => TagResource::collection($tags),
         ]);
     }
 
@@ -40,7 +39,7 @@ class TagController extends Controller
         return response()->json([
             'status'    => 'success',
             'message'   => 'Tag retrieved successfully',
-            'data'      => $tag
+            'data'      => new TagResource($tag),
         ]);
     }
 
@@ -51,7 +50,7 @@ class TagController extends Controller
         return response()->json([
             'status'    => 'success',
             'message'   => 'Tag created successfully',
-            'data'      => $tag
+            'data'      => new TagResource($tag),
         ], 201);
     }
 
@@ -72,7 +71,7 @@ class TagController extends Controller
         return response()->json([
             'status'    => 'success',
             'message'   => 'Tag updated successfully',
-            'data'      => $updated
+            'data'      => new TagResource($updated),
         ]);
     }
 
