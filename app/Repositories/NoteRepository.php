@@ -21,11 +21,13 @@ class NoteRepository implements NoteRepositoryInterface
 
     public function create(int $userId, int $tagId, string $text): Note
     {
-        return Note::create([
+        $note = Note::create([
             'user_id' => $userId,
             'tag_id' => $tagId,
             'text' => $text,
         ]);
+
+        return $note->load('tag');
     }
 
     public function update(int $id, int $userId, int $tagId, string $text): Note
@@ -38,7 +40,7 @@ class NoteRepository implements NoteRepositoryInterface
             'tag_id' => $tagId,
             'text' => $text,
         ]);
-        return $note->fresh();
+        return $note->fresh('tag');
     }
 
     public function delete(int $id, int $userId): void

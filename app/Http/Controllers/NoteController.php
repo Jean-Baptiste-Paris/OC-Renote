@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreNoteRequest;
+use App\Http\Resources\NoteResource;
 use App\Services\NoteService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
@@ -13,8 +14,6 @@ class NoteController extends Controller
         private NoteService $noteService
     ) {}
 
-    // TODO: Masquer les champs sensibles (user_id, tag_id) des réponses JSON
-
     public function index(): JsonResponse
     {
         $notes = $this->noteService->getNotesForUser(Auth::id());
@@ -22,7 +21,7 @@ class NoteController extends Controller
         return response()->json([
             'status'    => 'success',
             'message'   => 'Notes retrieved successfully',
-            'data'      => $notes,
+            'data'      => NoteResource::collection($notes),
         ]);
     }
 
@@ -41,7 +40,7 @@ class NoteController extends Controller
         return response()->json([
             'status'    => 'success',
             'message'   => 'Note retrieved successfully',
-            'data'      => $note,
+            'data'      => new NoteResource($note),
         ]);
     }
 
@@ -56,7 +55,7 @@ class NoteController extends Controller
         return response()->json([
             'status'    => 'success',
             'message'   => 'Note created successfully',
-            'data'      => $note,
+            'data'      => new NoteResource($note),
         ], 201);
     }
 
@@ -82,7 +81,7 @@ class NoteController extends Controller
         return response()->json([
             'status'    => 'success',
             'message'   => 'Note updated successfully',
-            'data'      => $updated,
+            'data'      => new NoteResource($updated),
         ]);
     }
 
