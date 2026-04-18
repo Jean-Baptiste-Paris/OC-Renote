@@ -18,6 +18,13 @@ interface AuthState {
     ) => Promise<void>;
     logout: () => Promise<void>;
     fetchProfile: () => Promise<void>;
+    updateProfile: (name: string, email: string) => Promise<void>;
+    updatePassword: (
+        currentPassword: string,
+        newPassword: string,
+        newPasswordConfirmation: string
+    ) => Promise<void>;
+    deleteAccount: (password: string) => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>((set, get) => ({
@@ -81,5 +88,55 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     fetchProfile: async () => {
         const { data } = await api.get<ApiResponse<User>>('/profile');
         set({ user: data.data });
+    },
+
+    updateProfile: async (name, email) => {
+        set({ loading: true, error: null });
+        try {
+            const { data } = await api.put<ApiResponse<User>>('/profile', {
+                name,
+                email,
+            });
+            set({ user: data.data, loading: false });
+        } catch (err) {
+            const message =
+                (err as AxiosError<ApiResponse<null>>).response?.data?.message
+                ?? 'Failed to update profile';
+            set({ error: message, loading: false });
+            throw err;
+        }
+    },
+
+    updatePassword: async (currentPassword, newPassword, newPasswordConfirmation) => {
+        set({ loading: true, error: null });
+        try {
+            await api.put('/password', {
+                current_password: currentPassword,
+                password: newPassword,
+                password_confirmation: newPasswordConfirmation,
+            });
+            set({ loading: false });
+        } catch (err) {
+            const message =
+                (err as AxiosError<ApiResponse<null>>).response?.data?.message
+                ?? 'Failed to update password';
+            set({ error: message, loading: false });
+            throw err;
+        }
+    },
+
+    deleteAccount: async (password) => {
+        set({ loading: true, error: null });
+        try {
+            await api.delete('/profile', { data: { password } });
+            localStorage.removeItem(TOKEN_STORAGE_KEY);
+            set({ token: null, user: null, loading: false });
+        } catch (err) {
+            const message =
+                (err as AxiosError<ApiResponse<null>>).response?.data?.message
+                ?? 'Failed to delete account';
+            set({ error: message, loading: false });
+            throw err;
+        }
     },
 }));
