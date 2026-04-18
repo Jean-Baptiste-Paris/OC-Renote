@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { ProfileForm } from '../components/settings/ProfileForm';
-import PasswordForm from '../components/settings/PasswordForm';
+import { PasswordForm } from '../components/settings/PasswordForm';
 import { DeleteAccountForm } from '../components/settings/DeleteAccountForm';
 
 export function SettingsPage() {
