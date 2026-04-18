@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\DeleteAccountRequest;
 use App\Http\Requests\UpdateProfileRequest;
+use App\Http\Resources\UserResource;
 use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -19,7 +20,7 @@ class ProfileController extends Controller
         return response()->json([
             'status'    => 'success',
             'message'   => 'Profile retrieved successfully',
-            'data'      => $request->user(),
+            'data'      => new UserResource($request->user()),
         ]);
     }
 
@@ -33,7 +34,7 @@ class ProfileController extends Controller
         return response()->json([
             'status'    => 'success',
             'message'   => 'Profile updated successfully',
-            'data'      => $user,
+            'data'      => new UserResource($user),
         ]);
     }
 
