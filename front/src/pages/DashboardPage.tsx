@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuthStore } from '../stores/useAuthStore';
 import { NoteForm } from '../components/notes/NoteForm';
 import { NoteList } from '../components/notes/NoteList';
@@ -19,6 +20,12 @@ export function DashboardPage() {
                 <h1 className="text-2xl font-bold">Dashboard</h1>
                 <div className="flex items-center gap-4">
                     {user && <span>Hello {user.name}</span>}
+                    <Link
+                        to="/settings"
+                        className="text-sm text-gray-600 underline"
+                    >
+                        Settings
+                    </Link>
                     <button
                         onClick={logout}
                         className="text-sm text-gray-600 underline"
