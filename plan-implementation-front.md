@@ -1,17 +1,17 @@
 # Plan d'implementation front-end React
 
 ## 1. Setup technique
-- [ ] Installer React, React DOM, React Router
-- [ ] Installer Zustand
-- [ ] Configurer Vite pour supporter JSX
-- [ ] Creer main.jsx (point de montage)
-- [ ] Creer App.jsx (routeur)
+- [X] Installer React, React DOM, React Router
+- [X] Installer Zustand
+- [X] Configurer Vite pour supporter JSX
+- [X] Creer main.jsx (point de montage)
+- [X] Creer App.jsx (routeur)
 
 ## 2. Couche services
-- [ ] services/api.js — client HTTP centralise (token Bearer, base URL)
+- [X] services/api.js — client HTTP centralise (token Bearer, base URL)
 
 ## 3. Stores Zustand
-- [ ] store/useAuthStore.js — token, user, login(), register(), logout()
+- [X] store/useAuthStore.js — token, user, login(), register(), logout()
 - [ ] store/useNoteStore.js — notes[], loading, error, fetchNotes(), createNote(), deleteNote()
 - [ ] store/useTagStore.js — tags[], fetchTags(), createTag()
 

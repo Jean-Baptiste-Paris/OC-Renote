@@ -1,7 +1,26 @@
 import { create } from 'zustand';
+import { AxiosError } from 'axios';
 import { api, TOKEN_STORAGE_KEY } from '../services/api';
+import type { ApiResponse, AuthTokenData, User } from '../types/api';
 
-export const useAuthStore = create((set, get) => ({
+interface AuthState {
+    token: string | null;
+    user: User | null;
+    loading: boolean;
+    error: string | null;
+
+    login: (email: string, password: string) => Promise<void>;
+    register: (
+        name: string,
+        email: string,
+        password: string,
+        passwordConfirmation: string
+    ) => Promise<void>;
+    logout: () => Promise<void>;
+    fetchProfile: () => Promise<void>;
+}
+
+export const useAuthStore = create<AuthState>((set, get) => ({
     token: localStorage.getItem(TOKEN_STORAGE_KEY),
     user: null,
     loading: false,
@@ -10,16 +29,19 @@ export const useAuthStore = create((set, get) => ({
     login: async (email, password) => {
         set({ loading: true, error: null });
         try {
-            const { data } = await api.post('/login', { email, password });
+            const { data } = await api.post<ApiResponse<AuthTokenData>>('/login', {
+                email,
+                password,
+            });
             const token = data.data.token;
             localStorage.setItem(TOKEN_STORAGE_KEY, token);
             set({ token, loading: false });
             await get().fetchProfile();
         } catch (err) {
-            set({
-                error: err.response?.data?.message ?? 'Login failed',
-                loading: false,
-            });
+            const message =
+                (err as AxiosError<ApiResponse<null>>).response?.data?.message
+                ?? 'Login failed';
+            set({ error: message, loading: false });
             throw err;
         }
     },
@@ -27,7 +49,7 @@ export const useAuthStore = create((set, get) => ({
     register: async (name, email, password, passwordConfirmation) => {
         set({ loading: true, error: null });
         try {
-            const { data } = await api.post('/register', {
+            const { data } = await api.post<ApiResponse<AuthTokenData>>('/register', {
                 name,
                 email,
                 password,
@@ -38,10 +60,10 @@ export const useAuthStore = create((set, get) => ({
             set({ token, loading: false });
             await get().fetchProfile();
         } catch (err) {
-            set({
-                error: err.response?.data?.message ?? 'Registration failed',
-                loading: false,
-            });
+            const message =
+                (err as AxiosError<ApiResponse<null>>).response?.data?.message
+                ?? 'Registration failed';
+            set({ error: message, loading: false });
             throw err;
         }
     },
@@ -57,7 +79,7 @@ export const useAuthStore = create((set, get) => ({
     },
 
     fetchProfile: async () => {
-        const { data } = await api.get('/profile');
+        const { data } = await api.get<ApiResponse<User>>('/profile');
         set({ user: data.data });
     },
 }));

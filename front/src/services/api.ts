@@ -1,8 +1,8 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
-const TOKEN_STORAGE_KEY = 'auth_token';
+export const TOKEN_STORAGE_KEY = 'auth_token';
 
-const api = axios.create({
+export const api = axios.create({
     baseURL: import.meta.env.VITE_API_URL,
     headers: {
         'Accept': 'application/json',
@@ -20,7 +20,7 @@ api.interceptors.request.use((config) => {
 
 api.interceptors.response.use(
     (response) => response,
-    (error) => {
+    (error: AxiosError) => {
         if (error.response?.status === 401) {
             localStorage.removeItem(TOKEN_STORAGE_KEY);
             if (window.location.pathname !== '/login') {
@@ -30,5 +30,3 @@ api.interceptors.response.use(
         return Promise.reject(error);
     }
 );
-
-export { api, TOKEN_STORAGE_KEY };
