@@ -1,7 +1,7 @@
 import {useState, type FormEvent} from "react";
 import {useAuthStore} from "../../stores/useAuthStore.ts";
 
-export default function PasswordForm() {
+export function PasswordForm() {
     const updatePassword = useAuthStore((s) => s.updatePassword);
     const loading = useAuthStore((s) => s.loading);
     const error = useAuthStore((s) => s.error);

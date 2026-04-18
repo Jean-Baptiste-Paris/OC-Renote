@@ -2,7 +2,7 @@ import {useState, type FormEvent} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {useAuthStore} from '../../stores/useAuthStore';
 
-export function DeleteAccount() {
+export function DeleteAccountForm() {
     const deleteAccount = useAuthStore((s) => s.deleteAccount);
     const loading = useAuthStore((s) => s.loading);
     const error = useAuthStore((s) => s.error);
