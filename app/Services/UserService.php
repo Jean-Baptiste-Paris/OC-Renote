@@ -19,4 +19,18 @@ class UserService
             $data['password']
         );
     }
+
+    public function updateProfile(User $user, array $data): User
+    {
+        return $this->userRepository->update(
+            $user,
+            $data['name'],
+            $data['email']
+        );
+    }
+
+    public function deleteUser(User $user): void
+    {
+        $this->userRepository->delete($user);
+    }
 }

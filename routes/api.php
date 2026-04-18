@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\PasswordController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TagController;
 use Illuminate\Support\Facades\Route;
 
@@ -15,6 +16,10 @@ Route::post('/reset-password', [PasswordController::class, 'reset']);
 Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/logout', [AuthController::class, 'logout']);
+
+    Route::get('/profile', [ProfileController::class, 'show']);
+    Route::put('/profile', [ProfileController::class, 'update']);
+    Route::delete('/profile', [ProfileController::class, 'destroy']);
 
     Route::put('/password', [PasswordController::class, 'update']);
 

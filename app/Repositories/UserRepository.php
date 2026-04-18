@@ -15,4 +15,19 @@ class UserRepository implements UserRepositoryInterface
             'password'  => bcrypt($password),
         ]);
     }
+
+    public function update(User $user, string $name, string $email): User
+    {
+        $user->update([
+            'name'  => $name,
+            'email' => $email,
+        ]);
+
+        return $user;
+    }
+
+    public function delete(User $user): void
+    {
+        $user->delete();
+    }
 }
